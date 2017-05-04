@@ -66,7 +66,8 @@ module YARD
       # Defines the rake task
       # @return [void]
       def define
-        desc "Generate YARD Documentation" unless ::Rake.application.last_comment
+        predicate = ::Rake.application.respond_to?(:last_description) ? :last_description : :last_comment
+        desc "Generate YARD Documentation" unless ::Rake.application.public_send(predicate)
         task(name) do
           before.call if before.is_a?(Proc)
           yardoc = YARD::CLI::Yardoc.new
